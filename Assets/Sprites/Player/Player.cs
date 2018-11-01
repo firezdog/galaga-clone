@@ -5,20 +5,37 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
+	[SerializeField] bool testing = false;
 	[SerializeField] public float speed = 10.0f;
-	[SerializeField] public float bottomLimit = -8.8f;
-	[SerializeField] public float topLimit = -3f;
-	[SerializeField] public float leftLimit = -4.5f;
-	[SerializeField] public float rightLimit = 4.5f;
+	[SerializeField, Range(0.4f,1)] public float relTopLimit = 0.4f;
+	[SerializeField, Range(0,0.1f)] public float bottomMargin = 0.05f;
+	[SerializeField, Range(0,0.1f)] public float leftRightMargin = 0.1f;
+	// the relative top limit in terms of game screen
+	// absolute limits in terms of game units
+	[NonSerialized] public float bottomLimit;
+	[NonSerialized] public float topLimit;
+	[NonSerialized] public float leftLimit;
+	[NonSerialized] public float rightLimit;
 
 	// Use this for initialization
 	void Start () {
-		
+		SetUpMoveBoundaries();
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		if(testing) { SetUpMoveBoundaries(); }
 		Move();
+	}
+
+	private void SetUpMoveBoundaries() {
+		Camera camera = FindObjectOfType<Camera>();
+		Vector3 lowerLeft = camera.ViewportToWorldPoint(new Vector3(0 + leftRightMargin, 0 + bottomMargin, camera.nearClipPlane));
+		Vector3 upperRight = camera.ViewportToWorldPoint(new Vector3(1 - leftRightMargin, relTopLimit, camera.nearClipPlane));
+		bottomLimit = lowerLeft.y;
+		topLimit = upperRight.y;
+		leftLimit = lowerLeft.x;
+		rightLimit = upperRight.x;
 	}
 
     private void Move()
