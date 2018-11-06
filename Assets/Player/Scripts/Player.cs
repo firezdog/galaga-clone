@@ -28,8 +28,8 @@ public class Player : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (testing) { SetUpMoveBoundaries(); }
-		Move();
 		ManageFire();
+		Move();
 	}
 
 	private void ManageFire() {
@@ -43,10 +43,9 @@ public class Player : MonoBehaviour {
 
 	private IEnumerator Fire () {
 		while (true) {
-			Vector3 currentPosition = gameObject.transform.position;
 			Instantiate(
 				laser, 
-				currentPosition, 
+				gameObject.transform.position, 
 				Quaternion.identity);
 			yield return new WaitForSeconds(fireRate);
 		}
@@ -64,14 +63,12 @@ public class Player : MonoBehaviour {
 
     private void Move()
     {
+		// this could be cleaned up a bit?
         float speedDeltaTime = speed * Time.deltaTime;
-		float x = transform.position.x;
-		float y = transform.position.y;
-		float z = transform.position.z;
 		float xDelta = Input.GetAxis("Horizontal") * speedDeltaTime;
 		float yDelta = Input.GetAxis("Vertical") * speedDeltaTime;
-		float newX = Mathf.Clamp(x + xDelta, leftLimit, rightLimit);
-		float newY = Mathf.Clamp(y + yDelta, bottomLimit, topLimit);
-		transform.position = new Vector3(newX, newY, z);
+		float newX = Mathf.Clamp(transform.position.x + xDelta, leftLimit, rightLimit);
+		float newY = Mathf.Clamp(transform.position.y + yDelta, bottomLimit, topLimit);
+		transform.position = new Vector3(newX, newY, transform.position.z);
     }
 }

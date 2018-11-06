@@ -58,6 +58,7 @@ MonoBehaviour:
   bottomMargin: 0.05
   leftRightMargin: 0.1
   laser: {fileID: 1189902488380344, guid: 5979098028027d847bed30446c96bce6, type: 2}
+  fireRate: 0.5
 --- !u!212 &212591337909795544
 SpriteRenderer:
   m_ObjectHideFlags: 1

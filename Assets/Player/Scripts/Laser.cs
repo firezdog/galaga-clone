@@ -18,7 +18,7 @@ public class Laser : MonoBehaviour {
 	void Update () 
 	{
 		move();
-		eliminate();
+		// eliminate();
 	}
 
     private void move()
