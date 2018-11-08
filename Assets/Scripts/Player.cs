@@ -28,8 +28,8 @@ public class Player : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (testing) { SetUpMoveBoundaries(); }
-		ManageFire();
 		Move();
+		ManageFire();
 	}
 
 	private void ManageFire() {
@@ -43,7 +43,7 @@ public class Player : MonoBehaviour {
 
 	private IEnumerator Fire () {
 		while (true) {
-			Instantiate(
+			var newLaser = Instantiate(
 				laser, 
 				gameObject.transform.position, 
 				Quaternion.identity);
@@ -71,4 +71,5 @@ public class Player : MonoBehaviour {
 		float newY = Mathf.Clamp(transform.position.y + yDelta, bottomLimit, topLimit);
 		transform.position = new Vector3(newX, newY, transform.position.z);
     }
+
 }
