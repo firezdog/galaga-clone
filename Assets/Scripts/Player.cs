@@ -12,10 +12,8 @@ public class Player : MonoBehaviour {
 	[SerializeField, Range(0,0.1f)] float bottomMargin = 0.05f;
 	[SerializeField, Range(0,0.1f)] float leftRightMargin = 0.1f;
 	// absolute limits in terms of game units
-	[NonSerialized] float bottomLimit;
-	[NonSerialized] float topLimit;
-	[NonSerialized] float leftLimit;
-	[NonSerialized] float rightLimit;
+	[NonSerialized] Vector2 bottomLeftLimit;
+	[NonSerialized] Vector2 topRightLimit;
 	// other objects
 	[SerializeField] GameObject laser;
 	[SerializeField, Range(0,1)] float fireRate = 0.5f;
@@ -53,23 +51,38 @@ public class Player : MonoBehaviour {
 
 	private void SetUpMoveBoundaries() {
 		Camera camera = FindObjectOfType<Camera>();
-		Vector3 lowerLeft = camera.ViewportToWorldPoint(new Vector3(0 + leftRightMargin, 0 + bottomMargin, camera.nearClipPlane));
-		Vector3 upperRight = camera.ViewportToWorldPoint(new Vector3(1 - leftRightMargin, relTopLimit, camera.nearClipPlane));
-		bottomLimit = lowerLeft.y;
-		topLimit = upperRight.y;
-		leftLimit = lowerLeft.x;
-		rightLimit = upperRight.x;
+		var clipPoint = camera.nearClipPlane;
+		bottomLeftLimit = camera.ViewportToWorldPoint(
+			new Vector3(
+				leftRightMargin, 
+				bottomMargin, 
+				clipPoint));
+		topRightLimit = camera.ViewportToWorldPoint(
+			new Vector3(
+				1 - leftRightMargin, 
+				relTopLimit, 
+				clipPoint));
 	}
 
     private void Move()
     {
-		// this could be cleaned up a bit?
-        float speedDeltaTime = speed * Time.deltaTime;
-		float xDelta = Input.GetAxis("Horizontal") * speedDeltaTime;
-		float yDelta = Input.GetAxis("Vertical") * speedDeltaTime;
-		float newX = Mathf.Clamp(transform.position.x + xDelta, leftLimit, rightLimit);
-		float newY = Mathf.Clamp(transform.position.y + yDelta, bottomLimit, topLimit);
+		Vector2 motionVector = getMotionInput();
+		float newX = Mathf.Clamp(
+			transform.position.x + motionVector.x, 
+			bottomLeftLimit.x, 
+			topRightLimit.x);
+		float newY = Mathf.Clamp(
+			transform.position.y + motionVector.y, 
+			bottomLeftLimit.y, 
+			topRightLimit.y);
 		transform.position = new Vector3(newX, newY, transform.position.z);
     }
+
+	private Vector2 getMotionInput() {
+		float speedDeltaTime = speed * Time.deltaTime;
+		float xDelta = Input.GetAxis("Horizontal") * speedDeltaTime;
+		float yDelta = Input.GetAxis("Vertical") * speedDeltaTime;
+		return new Vector2(xDelta, yDelta);
+	}
 
 }
