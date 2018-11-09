@@ -41,7 +41,7 @@ public class Player : MonoBehaviour {
 
 	private IEnumerator Fire () {
 		while (true) {
-			var newLaser = Instantiate(
+			Instantiate(
 				laser, 
 				gameObject.transform.position, 
 				Quaternion.identity);
