@@ -43,7 +43,7 @@ public class Player : MonoBehaviour {
 		while (true) {
 			Instantiate(
 				laser, 
-				gameObject.transform.position, 
+				getInstantiationPoint(), 
 				Quaternion.identity);
 			yield return new WaitForSeconds(fireRate);
 		}
@@ -83,6 +83,14 @@ public class Player : MonoBehaviour {
 		float xDelta = Input.GetAxis("Horizontal") * speedDeltaTime;
 		float yDelta = Input.GetAxis("Vertical") * speedDeltaTime;
 		return new Vector2(xDelta, yDelta);
+	}
+
+	private Vector3 getInstantiationPoint() {
+		Vector3 motion = (Vector3) getMotionInput();
+		return 
+			gameObject.transform.position +
+			2 * motion +
+			new Vector3(0,1,0);
 	}
 
 }
