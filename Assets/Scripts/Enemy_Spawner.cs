@@ -10,14 +10,19 @@ public class Enemy_Spawner : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		spawnWave(waves[0]);
-		spawnWave(waves[1]);
-
+		StartCoroutine("spawnWaves");
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
+	}
+
+	IEnumerator spawnWaves() {
+		foreach (var wave in waves) {
+			spawnWave(wave);
+			yield return new WaitForSeconds(timeBetweenWaves);
+		}
 	}
 
 	void spawnWave(WaveConfig wave) {
