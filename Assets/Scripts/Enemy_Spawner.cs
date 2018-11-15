@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ayn = UnityEngine.Random;
 
 public class Enemy_Spawner : MonoBehaviour {
 
@@ -18,13 +19,6 @@ public class Enemy_Spawner : MonoBehaviour {
 
 	}
 
-	IEnumerator spawnWaves() {
-		foreach (var wave in waves) {
-			spawnWave(wave);
-			yield return new WaitForSeconds(timeBetweenWaves);
-		}
-	}
-
 	void spawnWave(WaveConfig wave) {
 		StartCoroutine("spawnWaveEnemies", wave);
 	}
@@ -39,7 +33,16 @@ public class Enemy_Spawner : MonoBehaviour {
 			);
 			enemy.GetComponent<Enemy>().setMoveSpeed(wave.getMoveSpeed());
 			enemy.GetComponent<Enemy>().setWaypoints(wave.getWaypoints());
-			yield return new WaitForSeconds(wave.getTimeBetweenSpawns());
+			var randomFactor = 1 + ayn.Range(0, wave.getSpawnRandomFactor());
+			yield return new WaitForSeconds(wave.getTimeBetweenSpawns() * randomFactor);
+		}
+	}
+
+	IEnumerator spawnWaves() {
+		foreach (var wave in waves) {
+			spawnWave(wave);
+			float randomFactor = 1 + ayn.Range(0, waveRandomFactor);
+			yield return new WaitForSeconds(timeBetweenWaves * randomFactor);
 		}
 	}
 

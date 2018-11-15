@@ -144,7 +144,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4b48f5d2c7f7c5043b9a86e80d8add99, type: 2}
   - {fileID: 11400000, guid: f6a3402ba6e3c674481ab59590f27063, type: 2}
   timeBetweenWaves: 5
-  waveRandomFactor: 0.3
+  waveRandomFactor: 1
 --- !u!4 &3872352
 Transform:
   m_ObjectHideFlags: 0
@@ -200,8 +200,7 @@ Prefab:
     - target: {fileID: 1457610083322912, guid: e3f80ff504e98454a83d60a80a22a18f, type: 2}
       propertyPath: m_Icon
       value: 
-      objectReference: {fileID: 7866945982896999795, guid: 0000000000000000d000000000000000,
-        type: 0}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3f80ff504e98454a83d60a80a22a18f, type: 2}
   m_IsPrefabAsset: 0
