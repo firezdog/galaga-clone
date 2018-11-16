@@ -23,6 +23,10 @@ public class Enemy_Spawner : MonoBehaviour {
 		StartCoroutine("spawnWaveEnemies", wave);
 	}
 
+	float getRandomWaitFactor (float randomFactor) {
+		return 1 + ayn.Range(0, randomFactor);
+	}
+
 	IEnumerator spawnWaveEnemies(WaveConfig wave) {
 		Debug.Log(wave.getWaypoints()[0].position);
 		for (int enemy_count = 0; enemy_count < wave.getNumberOfEnemies(); enemy_count++) {
@@ -33,16 +37,19 @@ public class Enemy_Spawner : MonoBehaviour {
 			);
 			enemy.GetComponent<Enemy>().setMoveSpeed(wave.getMoveSpeed());
 			enemy.GetComponent<Enemy>().setWaypoints(wave.getWaypoints());
-			var randomFactor = 1 + ayn.Range(0, wave.getSpawnRandomFactor());
-			yield return new WaitForSeconds(wave.getTimeBetweenSpawns() * randomFactor);
+			yield return new WaitForSeconds(
+				wave.getTimeBetweenSpawns() * getRandomWaitFactor(wave.getSpawnRandomFactor()));
 		}
+
 	}
 
 	IEnumerator spawnWaves() {
-		foreach (var wave in waves) {
-			spawnWave(wave);
-			float randomFactor = 1 + ayn.Range(0, waveRandomFactor);
-			yield return new WaitForSeconds(timeBetweenWaves * randomFactor);
+		while (true) {
+			foreach (var wave in waves) {;
+				spawnWave(wave);
+				yield return new WaitForSeconds(timeBetweenWaves * getRandomWaitFactor(waveRandomFactor));
+			}
+			yield return new WaitForSeconds(timeBetweenWaves * getRandomWaitFactor(waveRandomFactor));		
 		}
 	}
 
