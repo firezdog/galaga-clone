@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ayn = UnityEngine.Random;
@@ -23,33 +24,41 @@ public class Enemy_Spawner : MonoBehaviour {
 		StartCoroutine("spawnWaveEnemies", wave);
 	}
 
-	float getRandomWaitFactor (float randomFactor) {
-		return 1 + ayn.Range(0, randomFactor);
+	float getRandomWaitFactor (float randomFactor, float waitTime) {
+		var randomMultiplier = 1 + ayn.Range(0, randomFactor);
+		return waitTime * randomMultiplier;
 	}
 
 	IEnumerator spawnWaveEnemies(WaveConfig wave) {
-		Debug.Log(wave.getWaypoints()[0].position);
-		for (int enemy_count = 0; enemy_count < wave.getNumberOfEnemies(); enemy_count++) {
-			var enemy = GameObject.Instantiate(
-				wave.getEnemyPrefab(),
-				wave.getWaypoints()[0].position,
-				Quaternion.identity
-			);
-			enemy.GetComponent<Enemy>().setMoveSpeed(wave.getMoveSpeed());
-			enemy.GetComponent<Enemy>().setWaypoints(wave.getWaypoints());
-			yield return new WaitForSeconds(
-				wave.getTimeBetweenSpawns() * getRandomWaitFactor(wave.getSpawnRandomFactor()));
+		var numberOfEnemies = wave.getNumberOfEnemies();
+		for (int enemy_count = 0; enemy_count < numberOfEnemies; enemy_count++) {
+			instantiateEnemy(wave);
+			var waitTime = getRandomWaitFactor(wave.getSpawnRandomFactor(), wave.getTimeBetweenSpawns());
+			yield return new WaitForSeconds(waitTime);
 		}
-
 	}
 
-	IEnumerator spawnWaves() {
+    private void instantiateEnemy(WaveConfig wave)
+    {
+        var enemy = GameObject.Instantiate(
+			wave.getEnemyPrefab(),
+			wave.getWaypoints()[0].position,
+			Quaternion.identity
+		);
+		enemy.GetComponent<Enemy>().setMoveSpeed(wave.getMoveSpeed());
+		enemy.GetComponent<Enemy>().setWaypoints(wave.getWaypoints());
+    }
+
+    IEnumerator spawnWaves() {
+		float waitTime;
 		while (true) {
 			foreach (var wave in waves) {;
 				spawnWave(wave);
-				yield return new WaitForSeconds(timeBetweenWaves * getRandomWaitFactor(waveRandomFactor));
+				waitTime = getRandomWaitFactor(waveRandomFactor, timeBetweenWaves);
+				yield return new WaitForSeconds(waitTime);
 			}
-			yield return new WaitForSeconds(timeBetweenWaves * getRandomWaitFactor(waveRandomFactor));		
+			waitTime = getRandomWaitFactor(waveRandomFactor, timeBetweenWaves);
+			yield return new WaitForSeconds(waitTime);
 		}
 	}
 
