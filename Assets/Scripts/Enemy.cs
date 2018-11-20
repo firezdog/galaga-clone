@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour {
 
-    float speed = 5;
+    float speed = 5f;
     public void setMoveSpeed (float newSpeed) { speed = newSpeed; }
     List<Transform> waypoints;
     public void setWaypoints (List<Transform> newWaypoints) { waypoints = newWaypoints; }
@@ -22,10 +22,10 @@ public class Enemy : MonoBehaviour {
     }
 
     private void Move () {
-        Vector2 currPos = transform.position;
+        Vector3 currPos = transform.position;
         // TODO: what if waypoints is empty?
-        Vector2 waypoint = waypoints[waypointIndex].position;
-        transform.position = Vector2.MoveTowards (currPos, waypoint, speed);
+        Vector3 waypoint = waypoints[waypointIndex].position;
+        transform.position = Vector3.MoveTowards (currPos, waypoint, speed);
         if (currPos == waypoint) {
             waypointIndex = (waypointIndex + 1); // % waypoints.Count;
         }

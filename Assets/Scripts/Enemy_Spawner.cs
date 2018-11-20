@@ -20,27 +20,24 @@ public class Enemy_Spawner : MonoBehaviour {
 
     IEnumerator spawnWaves () {
         while (true) {
-            float waitTime;
-            foreach (var wave in waves) {;
-                StartCoroutine ("spawnWaveEnemies", wave);
-                waitTime = getRandomWaitFactor (waveRandomFactor, timeBetweenWaves);
-                yield return new WaitForSeconds (waitTime);
+            foreach (var wave in waves) {
+                yield return StartCoroutine("spawnWaveEnemies", wave);
             }
-            waitTime = getRandomWaitFactor (waveRandomFactor, timeBetweenWaves);
-            yield return new WaitForSeconds (waitTime);
         }
     }
 
     IEnumerator spawnWaveEnemies (WaveConfig wave) {
+        float waitTime;
         var numberOfEnemies = wave.getNumberOfEnemies ();
         for (int enemy_count = 0; enemy_count < numberOfEnemies; enemy_count++) {
             instantiateEnemy (wave);
-            var waitTime = getRandomWaitFactor (wave.getSpawnRandomFactor (), wave.getTimeBetweenSpawns ());
+            waitTime = getRandomWaitTime (wave.getSpawnRandomFactor (), wave.getTimeBetweenSpawns ());
             yield return new WaitForSeconds (waitTime);
         }
+        yield return new WaitForSeconds (getRandomWaitTime (waveRandomFactor, timeBetweenWaves));
     }
 
-    float getRandomWaitFactor (float randomFactor, float waitTime) {
+    float getRandomWaitTime (float randomFactor, float waitTime) {
         var randomMultiplier = 1 + ayn.Range (0, randomFactor);
         return waitTime * randomMultiplier;
     }
@@ -49,7 +46,7 @@ public class Enemy_Spawner : MonoBehaviour {
         var enemy = GameObject.Instantiate (
             wave.getEnemyPrefab (),
             wave.getWaypoints () [0].position,
-            Quaternion.identity
+            wave.getEnemyPrefab ().transform.rotation
         );
         enemy.GetComponent<Enemy> ().setMoveSpeed (wave.getMoveSpeed ());
         enemy.GetComponent<Enemy> ().setWaypoints (wave.getWaypoints ());
