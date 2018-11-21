@@ -11,18 +11,18 @@ public class Enemy_Spawner : MonoBehaviour {
     [SerializeField] float waveRandomFactor = 0.3f;
 
     // Use this for initialization
-    void Start () {
-        StartCoroutine ("spawnWaves");
+    IEnumerator Start () {
+        while (true) {
+            yield return StartCoroutine ("spawnWaves");
+        }
     }
 
     // Update is called once per frame
     void Update () { }
 
     IEnumerator spawnWaves () {
-        while (true) {
-            foreach (var wave in waves) {
-                yield return StartCoroutine("spawnWaveEnemies", wave);
-            }
+        foreach (var wave in waves) {
+            yield return StartCoroutine("spawnWaveEnemies", wave);
         }
     }
 
