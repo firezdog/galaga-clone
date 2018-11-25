@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!1001 &100100000
@@ -128,6 +127,8 @@ Transform:
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 =======
+=======
+>>>>>>> 59addfc1a4a19b321e0a8feb16afeb0a562b8790
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!1001 &100100000
@@ -256,4 +257,3 @@ Transform:
   m_Father: {fileID: 4397943701180068}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
->>>>>>> 59addfc1a4a19b321e0a8feb16afeb0a562b8790

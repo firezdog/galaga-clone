@@ -28,15 +28,8 @@ public class Enemy_Spawner : MonoBehaviour {
     void Update () { }
 
     IEnumerator spawnWaves () {
-<<<<<<< HEAD
         foreach (var wave in waves) {
             yield return StartCoroutine("spawnWaveEnemies", wave);
-=======
-        while (true) {
-            foreach (var wave in waves) {
-                yield return StartCoroutine ("spawnWaveEnemies", wave);
-            }
->>>>>>> 59addfc1a4a19b321e0a8feb16afeb0a562b8790
         }
     }
 
