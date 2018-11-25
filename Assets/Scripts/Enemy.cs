@@ -18,12 +18,11 @@ public class Enemy : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        Move ();
+        if (waypoints != null && waypoints.Count > 0) { Move (); }
     }
 
     private void Move () {
         Vector3 currPos = transform.position;
-        // TODO: what if waypoints is empty?
         Vector3 waypoint = waypoints[waypointIndex].position;
         transform.position = Vector3.MoveTowards (currPos, waypoint, speed);
         if (currPos == waypoint) {
