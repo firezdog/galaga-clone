@@ -18,9 +18,11 @@ public class DamageDealer : MonoBehaviour {
 
     private void OnCollisionEnter2D(Collision2D other) {
         try {
-            Health otherHealth = other.gameObject.GetComponent<Health>();
-            int otherHP = otherHealth.HP();
-            otherHealth.HP(otherHP - damageAmount);
+            var enemy = other.gameObject;
+            var enemy_health = enemy.GetComponent<Health>().HP();
+            enemy_health -= damageAmount;
+            if (enemy_health <= 0) { Destroy(other.gameObject); }
+            else { enemy.GetComponent<Health>().HP(enemy_health); }
         }
         catch {
             Debug.Log(other.gameObject + " has no Health script attached.");    
